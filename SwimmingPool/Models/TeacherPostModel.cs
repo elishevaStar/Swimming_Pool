@@ -1,6 +1,6 @@
-﻿namespace Swim.Core.Entities
+﻿namespace Swim.API.Models
 {
-    public class Teacher:BaseModel
+    public class TeacherPostModel
     {
         public string? TeacherFirstName { get; set; }
         public string? TeacherLastName { get; set; }
@@ -10,8 +10,5 @@
         public bool TeacherStatus { get; set; }
         public DayOfWeek TeacherDays { get; set; }
         public DateTime TeacherHour { get; set; }
-
-        //יחיד לרבים
-        public List<Lesson> Lessons { get; set; }
     }
 }

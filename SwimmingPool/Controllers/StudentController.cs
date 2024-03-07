@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swim.API.Models;
+using Swim.Core.DTOs;
 using Swim.Core.Entities;
 using Swim.Core.Services;
 using Swim.Service;
@@ -10,51 +14,64 @@ namespace Swim.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
-        public StudentController(IStudentService studentService)
+        private readonly IMapper _mapper;
+
+        public StudentController(IStudentService studentService, IMapper mapper)
         {
             _studentService = studentService;
+            _mapper = mapper;   
         }
 
         // GET: api/<StudentController>
         [HttpGet]
-        public ActionResult<Student> Get()
+        public async Task<ActionResult> Get()
         {
-            return Ok(_studentService.GetAllStudents());
+            var lst =await _studentService.GetAllStudentsAsync();
+            var lstDto = _mapper.Map<IEnumerable<StudentDto>>(lst);
+            return Ok(lstDto);
         }
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public ActionResult< Student> Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var st=_studentService.GetStudentById(id);
-            return st;
+            var stu = await _studentService.GetStudentByIdAsync(id);
+            return Ok(_mapper.Map<StudentDto>(stu));
         }
 
         // POST api/<StudentController>
         [HttpPost]
-        public ActionResult Post([FromBody] Student s)
+        public async Task<ActionResult> Post([FromBody] StudentPostModel stu)
         {
-           _studentService.AddStudent(s);
+            var student = new Student();
+            _mapper.Map(stu, student);
+            await _studentService.AddStudentAsync(student);
             return Ok();
-
         }
 
         // PUT api/<StudentController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Student s)
+        public async Task<ActionResult> Put(int id, [FromBody] StudentPostModel stu)
         {
-            _studentService.UpdateStudent(id, s);
+            var existStudent = await _studentService.GetStudentByIdAsync(id);
+            if (existStudent is null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(stu, existStudent);
+            await _studentService.UpdateStudentAsync(id, existStudent);
             return Ok();
         }
 
         // DELETE api/<StudentController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _studentService.DeleteStudent(id);
+            await _studentService.DeleteStudentAsync(id);
             return Ok();
         }
     }

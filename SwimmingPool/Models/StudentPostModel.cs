@@ -1,6 +1,6 @@
-﻿namespace Swim.Core.Entities
+﻿namespace Swim.API.Models
 {
-    public class Student:BaseModel
+    public class StudentPostModel
     {
         public string StudentTz { get; set; }
         public string? StudentFirstName { get; set; }
@@ -10,12 +10,7 @@
         public string ParentsPhone { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? StudentEmail { get; set; }
-
         public bool StudentStatus { get; set; }
         public string? StudentStatusDescription { get; set; }
-        
-        
-        //יחיד לרבים
-        public List<Presence>  Presences { get; set; }
     }
 }

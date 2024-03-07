@@ -10,13 +10,13 @@ namespace Swim.Core.Repositories
 {
     public interface IPresenceRepository
     {
-        List<Presence> GetAllPresences();
+        Task<List<Presence>> GetAllPresencesAsync();
 
-       Presence GetPresenceById(int idT, int idL, int idS);
+        Task<Presence> GetPresenceByIdAsync(int id);
 
-        Presence AddPresence(Presence p);
+        Task<Presence> AddPresenceAsync(Presence p);
 
-        Presence UpdatePresence(int idT, int idL, int idS, Presence p);
+        Task<Presence> UpdatePresenceAsync(int id, Presence p);
 
     }
 }

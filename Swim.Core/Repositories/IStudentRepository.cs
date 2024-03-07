@@ -10,14 +10,14 @@ namespace Swim.Core.Repositories
 {
     public interface IStudentRepository
     {
-        List<Student> GetAllStudents();
+        Task<List<Student>> GetAllStudentsAsync();
 
-        Student GetStudentById(int id);
+        Task<Student> GetStudentByIdAsync(int id);
 
-        Student AddStudent(Student s);
+        Task<Student> AddStudentAsync(Student s);
 
-        Student UpdateStudent(int id, Student s);
+        Task<Student> UpdateStudentAsync(int id, Student s);
 
-        void DeleteStudent(int id);
+        Task DeleteStudentAsync(int id);
     }
 }

@@ -16,27 +16,8 @@ namespace Swim.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=swim_db");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=myswim_db");
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Presence>().HasKey(p => new { p.TeacherId, p.StudentId, p.LessonId });
-        }
-
-        //public DataContext()
-        //{
-        //    Lessons = new List<Lesson>();
-        //    Presences = new List<Presence>();
-        //    Students = new List<Student>();
-        //    Teachers= new List<Teacher>();
-        //    Students.Add(new Student { StudentId = StudentCount++, StudentFirstName = "elish", StudentLastName = "katz", Address = "Sorotzkin4", StudentPhone = "0504153454", ParentsPhone = "0504153089", DateOfBirth = DateTime.Now, StudentEmail = "elishstar1@gmail.com", StudentStatus = true, StudentStatusDescription = "שחיה חופשית" });
-        //    Teachers.Add(new Teacher { TeacherId = TeacherCount++, TeacherFirstName = "malka", TeacherLastName = "brok", TeacherAddress = "kriatHertzog", TeacherPhone = "0527603743", TeacherEmail = "mabrok@gmail.com", TeacherStatus = true, TeacherDays = DayOfWeek.Monday,  TeacherHour = DateTime.Now });
-        //    Teachers.Add(new Teacher { TeacherId = TeacherCount++, TeacherFirstName = "hadasa", TeacherLastName = "coen", TeacherAddress = "chavakok", TeacherPhone = "035732865", TeacherEmail = "hadsac@gmail.com", TeacherStatus = true,TeacherDays=DayOfWeek.Sunday,TeacherHour = DateTime.Now });
-        //    Lessons.Add(new Lesson { LessonId = LessonCount++, LessonDescription = "שיפור שחיה", LessonHour = DateTime.Now, TeacherId = 1 });
-        //    Lessons.Add(new Lesson { LessonId = LessonCount++, LessonDescription = "שחיה מתחילות", LessonHour = DateTime.Now, TeacherId = 2 });
-        //    Presences.Add(new Presence { LessonId = 1, TeacherId = 1, StudentId = 1, IsPresent = true });
-
-        //}
     }
 }

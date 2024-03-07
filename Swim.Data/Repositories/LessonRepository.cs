@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Swim.Core;
 using Swim.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Swim.Data.Repositories
 {
@@ -18,43 +19,41 @@ namespace Swim.Data.Repositories
         {
             _context = context;
         }
-        public List<Lesson> GetAllLessons()
+        public async Task<List<Lesson>> GetAllLessonsAsync()
         {
-            return _context.Lessons.ToList();
+            return await _context.Lessons.ToListAsync();
         }
 
-        public Lesson GetLessonById(int id)
+        public async Task<Lesson> GetLessonByIdAsync(int id)
         {
-            return _context.Lessons.Find(id);
+            return await _context.Lessons.FindAsync(id);
         }
-
-
-        public Lesson AddLesson(Lesson less)
+        public async Task<Lesson> AddLessonAsync(Lesson less)
         {
             _context.Lessons.Add(less);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return less;
         }
 
-        public Lesson UpdateLesson(int id, Lesson less)
+        public async Task<Lesson> UpdateLessonAsync(int id, Lesson less)
         {
-            var lesson = GetLessonById(id);
+            var lesson = await GetLessonByIdAsync(id);
             if (lesson != null)
             {
                 lesson.LessonDescription = less.LessonDescription;
-                lesson.LessonHour = less.LessonHour;
+                lesson.LessonDate = less.LessonDate;
                 lesson.TeacherId = less.TeacherId;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             return lesson;
         }
 
 
-        public void DeleteLesson(int id)
+        public async Task DeleteLessonAsync(int id)
         {
-            var less = GetLessonById(id);
+            var less = await GetLessonByIdAsync(id);
             _context.Lessons.Remove(less);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

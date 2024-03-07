@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swim.Core.Entities;
 using Swim.Core.Repositories;
 using System;
@@ -18,33 +19,33 @@ namespace Swim.Data.Repositories
             _context = context;
         }
 
-        public List<Presence> GetAllPresences()
+        public async Task<List<Presence>> GetAllPresencesAsync()
         {
-            return _context.Presences.ToList();
+            return await _context.Presences.ToListAsync();
         }
 
-        public Presence GetPresenceById(int idT, int idL, int idS)
+        public async Task<Presence> GetPresenceByIdAsync(int id)
         {
-            return _context.Presences.ToList().Find(p => p.TeacherId == idT && p.StudentId == idS && p.LessonId == idL);
+            return await _context.Presences.FindAsync(id);
             
         }
 
-        public Presence AddPresence(Presence p)
+        public async Task<Presence> AddPresenceAsync(Presence p)
         {
             _context.Presences.Add(p);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return p;
         }
 
-        public Presence UpdatePresence(int idT, int idL, int idS, Presence p)
+        public async Task<Presence> UpdatePresenceAsync(int id, Presence p)
         {
-            var pre = GetPresenceById(idT, idL, idS);
+            var pre =await GetPresenceByIdAsync(id);
             if (pre != null)
             {
                 pre.LessonId = p.LessonId;
                 pre.StudentId = p.StudentId;
                 pre.IsPresent = p.IsPresent;
-                pre.TeacherId = p.TeacherId;
+                await _context.SaveChangesAsync();
             }
 
             return pre;

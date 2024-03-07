@@ -1,6 +1,12 @@
-﻿namespace Swim.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Swim.Core.DTOs
 {
-    public class Student:BaseModel
+    public class StudentDto
     {
         public string StudentTz { get; set; }
         public string? StudentFirstName { get; set; }
@@ -10,12 +16,7 @@
         public string ParentsPhone { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? StudentEmail { get; set; }
-
         public bool StudentStatus { get; set; }
         public string? StudentStatusDescription { get; set; }
-        
-        
-        //יחיד לרבים
-        public List<Presence>  Presences { get; set; }
     }
 }

@@ -20,28 +20,33 @@ namespace Swim.Service
             _teacherRepository = teacherRepository;
         }
 
-        public List<Teacher> GetAllTeachers()
+        public async Task<List<Teacher>> GetAllTeachersAsync()
         {
-            return _teacherRepository.GetAllTeachers();
+            return await _teacherRepository.GetAllTeachersAsync();
         }
 
-        public ActionResult<Teacher> GetTeacherById(int id)
+        public async Task<Teacher> GetTeacherByIdAsync(int id)
         {
-           return _teacherRepository.GetTeacherById(id);
+           return await _teacherRepository.GetTeacherByIdAsync(id);
         }
 
-        public void AddTeacher(Teacher t)
+        public Teacher GetTeacherByUser(string userName, string password)
         {
-            _teacherRepository.AddTeacher(t);
+            return _teacherRepository.GetTeacherByUser(userName, password);
         }
 
-        public void UpdateTeacher(int id, Teacher t)
+        public async Task AddTeacherAsync(Teacher t)
         {
-            _teacherRepository.UpdateTeacher(id, t);
+            await _teacherRepository.AddTeacherAsync(t);
         }
-        public void DeleteTeacher(int id)
+
+        public async Task UpdateTeacherAsync(int id, Teacher t)
         {
-            _teacherRepository.DeleteTeacher(id);
+            await _teacherRepository.UpdateTeacherAsync(id, t);
+        }
+        public async Task DeleteTeacherAsync(int id)
+        {
+            await _teacherRepository.DeleteTeacherAsync(id);
         }
     }
 }

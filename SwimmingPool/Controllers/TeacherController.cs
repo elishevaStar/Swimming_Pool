@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swim.API.Models;
+using Swim.Core.DTOs;
 using Swim.Core.Entities;
 using Swim.Core.Services;
 using Swim.Service;
@@ -9,51 +13,69 @@ namespace Swim.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TeacherController : ControllerBase
     {
         private readonly ITeacherService _teacherService;
-        public TeacherController(ITeacherService teacherService)
+        private readonly IMapper _mapper;
+
+
+        public TeacherController(ITeacherService teacherService, IMapper mapper)
         {
             _teacherService = teacherService;
+            _mapper = mapper;   
         }
 
         // GET: api/<TeacherController>
         [HttpGet]
-        public ActionResult<Teacher> Get()
-        {
-            return Ok(_teacherService.GetAllTeachers());
+        [AllowAnonymous]
+        public async Task<ActionResult> Get()
+        { 
+           var lst= await _teacherService.GetAllTeachersAsync();
+           var lstDto = _mapper.Map<IEnumerable<TeacherDto>>(lst);
+            return Ok(lstDto);
         }
 
         // GET api/<TeacherController>/5
         [HttpGet("{id}")]
-        public ActionResult<Teacher> Get(int id)
+        [AllowAnonymous]
+        public async Task<ActionResult> Get(int id)
         {
-            var teach= _teacherService.GetTeacherById(id);
-            return teach;
+            var teach= await _teacherService.GetTeacherByIdAsync(id);
+            return Ok(_mapper.Map<TeacherDto>(teach));
         }
 
         // POST api/<TeacherController>
         [HttpPost]
-        public ActionResult Post([FromBody] Teacher t)
+        public async Task<ActionResult> Post([FromBody] TeacherPostModel t)
         {
-            _teacherService.AddTeacher(t);
+            var teacher = new Teacher();
+            _mapper.Map(t, teacher);
+            await _teacherService.AddTeacherAsync(teacher);
             return Ok();
 
         }
 
         // PUT api/<TeacherController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Teacher t)
+        public async Task<ActionResult> Put(int id, [FromBody] TeacherPostModel t)
         {
-            _teacherService.UpdateTeacher(id, t);   
+            
+            var existTeacher = await _teacherService.GetTeacherByIdAsync(id);
+            if (existTeacher is null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(t, existTeacher);
+            await _teacherService.UpdateTeacherAsync(id, existTeacher);   
             return Ok();
         }
 
         // DELETE api/<TeacherController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            _teacherService.DeleteTeacher(id);
+            await _teacherService.DeleteTeacherAsync(id);
             return Ok();
         }
     }

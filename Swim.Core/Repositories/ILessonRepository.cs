@@ -11,15 +11,15 @@ namespace Swim.Core.Repositories
 {
     public interface ILessonRepository
     {
-        List<Lesson> GetAllLessons();
+        Task<List<Lesson>> GetAllLessonsAsync();
 
-        Lesson GetLessonById(int id);
+        Task<Lesson> GetLessonByIdAsync(int id);
 
-        Lesson AddLesson(Lesson l);
+        Task<Lesson> AddLessonAsync(Lesson l);
 
-        Lesson UpdateLesson(int id, Lesson l);
+        Task<Lesson> UpdateLessonAsync(int id, Lesson l);
 
-        void DeleteLesson(int id);
+        Task DeleteLessonAsync(int id);
 
     }
 }

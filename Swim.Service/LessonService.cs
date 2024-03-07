@@ -20,31 +20,31 @@ namespace Swim.Service
         {
             _lessonRepository = lessonRepository;
         }
-        public List<Lesson> GetAllLessons()
+        public async Task<List<Lesson>> GetAllLessonsAsync()
         {
-            return _lessonRepository.GetAllLessons();
+            return await _lessonRepository.GetAllLessonsAsync();
         }
 
-        public ActionResult<Lesson> GetLessonById(int id)
+        public async Task<Lesson> GetLessonByIdAsync(int id)
         {
-            return _lessonRepository.GetLessonById(id);
-        }
-
-
-        public void AddLesson(Lesson less)
-        {
-            _lessonRepository.AddLesson(less);
-        }
-
-        public void UpdateLesson(int id, Lesson less)
-        {
-             _lessonRepository.UpdateLesson(id, less);
+            return await _lessonRepository.GetLessonByIdAsync(id);
         }
 
 
-        public void DeleteLesson(int id)
+        public async Task AddLessonAsync(Lesson less)
         {
-             _lessonRepository.DeleteLesson(id);
+           await _lessonRepository.AddLessonAsync(less);
+        }
+
+        public async Task UpdateLessonAsync(int id, Lesson less)
+        {
+            await  _lessonRepository.UpdateLessonAsync(id, less);
+        }
+
+
+        public async Task DeleteLessonAsync(int id)
+        {
+             await _lessonRepository.DeleteLessonAsync(id);
         }
     }
 }

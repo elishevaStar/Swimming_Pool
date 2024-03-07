@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swim.Core.Entities;
 using Swim.Core.Repositories;
 using System;
@@ -18,27 +19,33 @@ namespace Swim.Data.Repositories
             _context = context;
         }
 
-        public List<Teacher> GetAllTeachers()
+        public async Task<List<Teacher>> GetAllTeachersAsync()
         {
-            return _context.Teachers.ToList();
+            return await _context.Teachers.ToListAsync();
         }
 
-        public Teacher GetTeacherById(int id)
+        public async Task<Teacher> GetTeacherByIdAsync(int id)
         {
-            return _context.Teachers.Find(id);
+            return await _context.Teachers.FindAsync(id);
         }
 
-        public Teacher AddTeacher(Teacher t)
+        public Teacher GetTeacherByUser(string userName, string password)
+
+        {
+            return _context.Teachers.Where(t=>t.TeacherFirstName== userName && t.TeacherEmail== password).FirstOrDefault();
+        }
+
+        public async Task<Teacher> AddTeacherAsync(Teacher t)
         {
             _context.Teachers.Add(t);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return t;
         }
 
-        public Teacher UpdateTeacher(int id, Teacher t)
+        public async Task<Teacher> UpdateTeacherAsync(int id, Teacher t)
         {
-            var teach = GetTeacherById(id);
-            if (teach == null)
+            var teach = await GetTeacherByIdAsync(id);
+            if (teach != null)
             {
                 teach.TeacherHour = t.TeacherHour;
                 teach.TeacherStatus = t.TeacherStatus;
@@ -48,16 +55,16 @@ namespace Swim.Data.Repositories
                 teach.TeacherFirstName = t.TeacherFirstName;
                 teach.TeacherLastName = t.TeacherLastName;
                 teach.TeacherDays = t.TeacherDays;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             return teach;
         }
-        public void DeleteTeacher(int id)
+        public async Task DeleteTeacherAsync(int id)
         {
-            var teach = GetTeacherById(id);
+            var teach =await GetTeacherByIdAsync(id);
             _context.Teachers.Remove(teach);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

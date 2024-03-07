@@ -20,24 +20,24 @@ namespace Swim.Service
             _presenceRepository = presenceRepository;
         }
 
-        public List<Presence> GetAllPresences()
+        public async Task<List<Presence>> GetAllPresencesAsync()
         {
-            return _presenceRepository.GetAllPresences();
+            return await _presenceRepository.GetAllPresencesAsync();
         }
 
-        public ActionResult<Presence> GetPresenceById(int idT, int idL, int idS)
+        public async Task<Presence> GetPresenceByIdAsync(int id)
         {
-           return _presenceRepository.GetPresenceById(idT, idL, idS);
+           return await _presenceRepository.GetPresenceByIdAsync(id);
         }
 
-        public void AddPresence(Presence p)
+        public async Task AddPresenceAsync(Presence p)
         {
-            _presenceRepository.AddPresence(p);
+            await _presenceRepository.AddPresenceAsync(p);
         }
 
-        public void UpdatePresence(int idT, int idL, int idS, Presence p)
+        public async Task UpdatePresenceAsync(int id, Presence p)
         {
-            _presenceRepository.UpdatePresence(idT, idL, idS, p);
+            await _presenceRepository.UpdatePresenceAsync(id, p);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swim.Core.DTOs;
 using Swim.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace Swim.Core.Services
 {
     public interface IPresenceService
     {
-        List<Presence> GetAllPresences();
+        Task<List<Presence>> GetAllPresencesAsync();
 
-        ActionResult<Presence> GetPresenceById(int idT, int idL, int idS);
+        Task<Presence> GetPresenceByIdAsync(int id);
 
-        void AddPresence(Presence p);
+        Task AddPresenceAsync(Presence p);
 
-        void UpdatePresence(int idT, int idL, int idS, Presence p);
+        Task UpdatePresenceAsync(int id, Presence p);
     }
 }

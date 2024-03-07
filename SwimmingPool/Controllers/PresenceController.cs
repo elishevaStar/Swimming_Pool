@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swim.API.Models;
+using Swim.Core.DTOs;
 using Swim.Core.Entities;
 using Swim.Core.Services;
 using Swim.Service;
@@ -9,42 +13,68 @@ namespace Swim.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PresenceController : ControllerBase
     {
         private readonly IPresenceService _presenceService;
-        public PresenceController(IPresenceService presenceService)
+        private readonly IMapper _mapper;
+
+        public PresenceController(IPresenceService presenceService, IMapper mapper)
         {
             _presenceService = presenceService;
+            _mapper = mapper;
         }
 
         // GET: api/<PresenceController>
         [HttpGet]
-        public ActionResult<Presence> Get()
+        public async Task<ActionResult> Get()
         {
-            return Ok(_presenceService.GetAllPresences());
+            var lst =await _presenceService.GetAllPresencesAsync();
+            var lstDto = _mapper.Map<IEnumerable<PresenceDto>>(lst);
+            return Ok(lstDto);
         }
 
         // GET api/<PresenceController>/5
-        [HttpGet("{id,id,id}")]
-        public ActionResult<Presence>Get(int idT, int idL, int idS)
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(int id)
         {
-            var pre = _presenceService.GetPresenceById(idT, idL, idS);
-            return pre;
+            var presence =await _presenceService.GetPresenceByIdAsync(id);
+            return Ok(_mapper.Map<PresenceDto>(presence));
         }
 
         // POST api/<PresenceController>
         [HttpPost]
-        public void Post([FromBody] Presence p)
+        public async Task Post([FromBody] PresencePostModel p)
         {
-            _presenceService.AddPresence(p);
+            //var pres = new Presence
+            //{
+            //IsPresent = p.IsPresent,
+            //StudentId = p.StudentId,
+            //LessonId = p.LessonId
+            //};
+            var presence = new Presence();
+            _mapper.Map(p, presence);
+            await _presenceService.AddPresenceAsync(presence);
 
         }
 
         // PUT api/<PresenceController>/5
-        [HttpPut("{id,id,id}")]
-        public ActionResult Put(int idT, int idL, int idS, [FromBody] Presence p)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromBody] PresencePostModel p)
         {
-            _presenceService.UpdatePresence(idT, idL, idS, p);
+            //var pres = new Presence
+            //{
+            //    IsPresent = p.IsPresent,
+            //    StudentId = p.StudentId,
+            //    LessonId = p.LessonId
+            //};
+            var existPresence = await _presenceService.GetPresenceByIdAsync(id);
+            if (existPresence is null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(p, existPresence);
+            await _presenceService.UpdatePresenceAsync(id, existPresence);
             return Ok();
         }
 

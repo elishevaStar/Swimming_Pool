@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swim.Core.Entities;
 using Swim.Core.Repositories;
 using System;
@@ -18,28 +19,29 @@ namespace Swim.Data.Repositories
             _context = context;
         }
 
-        public List<Student> GetAllStudents()
+        public async Task<List<Student>> GetAllStudentsAsync()
         {
-            return _context.Students.ToList();
+            return await _context.Students.ToListAsync();
         }
 
-        public Student GetStudentById(int id)
+        public async Task<Student> GetStudentByIdAsync(int id)
         {
-            return _context.Students.Find(id);
+            return await _context.Students.FindAsync(id);
         }
 
-        public Student AddStudent(Student s)
+        public async Task<Student> AddStudentAsync(Student s)
         {
             _context.Students.Add(s);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return s;
         }
 
-        public Student UpdateStudent(int id, Student s)
+        public async Task<Student> UpdateStudentAsync(int id, Student s)
         {
-            var st = GetStudentById(id);
-           if(st == null)
+            var st = await GetStudentByIdAsync(id);
+           if(st != null)
            {
+                st.StudentTz = s.StudentTz;
                 st.StudentEmail = s.StudentEmail;
                 st.StudentStatus = s.StudentStatus;
                 st.StudentPhone = s.StudentPhone;
@@ -49,17 +51,17 @@ namespace Swim.Data.Repositories
                 st.ParentsPhone = s.ParentsPhone;
                 st.StudentFirstName = s.StudentFirstName;
                 st.StudentStatusDescription = s.StudentStatusDescription;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
-            }
+           }
             
             return st;
         }
-        public void DeleteStudent(int id)
+        public async Task DeleteStudentAsync(int id)
         {
-            var s = GetStudentById(id);
+            var s = await GetStudentByIdAsync(id);
             _context.Students.Remove(s);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

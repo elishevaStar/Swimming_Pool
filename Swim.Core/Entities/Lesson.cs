@@ -1,20 +1,19 @@
 ﻿namespace Swim.Core.Entities
 {
-    public class Lesson
+    public class Lesson:BaseModel
     {
-        //public Lesson() { }
-        public int LessonId { get; set; }
+        
         public string? LessonDescription { get; set; }
-        public DateTime LessonHour { get; set; }
+        public DateTime LessonDate { get; set; }
+
+        //יחיד לרבים
         public int TeacherId { get; set; }
 
-        //public Lesson( string? LessonDescription, TimeOnly LessonHour, int TeacherId)
-        //{
-        //    this.LessonId =LessonCount++;
-        //    this.LessonDescription = LessonDescription;
-        //    this.LessonHour = LessonHour;
-        //    this.TeacherId = TeacherId;
-        //}
+        public Teacher Teacher { get; set; }
+        //יחיד לרבים
+        public List<Presence> Presences { get; set; }
+
+
 
 
     }

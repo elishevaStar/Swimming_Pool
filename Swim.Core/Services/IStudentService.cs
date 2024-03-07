@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swim.Core.DTOs;
 using Swim.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,14 @@ namespace Swim.Core.Services
 {
     public interface IStudentService
     {
-        List<Student> GetAllStudents();
+        Task<List<Student>> GetAllStudentsAsync();
 
-        ActionResult<Student> GetStudentById(int id);
+        Task<Student> GetStudentByIdAsync(int id);
 
-        void AddStudent(Student s);
+        Task AddStudentAsync(Student s);
 
-        void UpdateStudent(int id, Student s);
+        Task UpdateStudentAsync(int id, Student s);
 
-        void DeleteStudent(int id);
+        Task DeleteStudentAsync(int id);
     }
 }
